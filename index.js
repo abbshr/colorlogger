@@ -4,17 +4,17 @@
 *  des: make terminal log more corlorful~
 */
 
-var util = require('util');
 var fs   = require('fs');
-var path = require('path');
+var util = require('util');
 
 // custom logger
 var log = function () {
   var copy = arguments;
-  Array.prototype.forEach.call(copy, function (e, i) {
-    i && (copy[i] = ' ' + e);
-  });
-  return util.print.apply(util, copy);
+  process.stdout.write(
+    Array.prototype.reduce.call(copy, function (a, b, i) {
+      if (!i) return `${b}`
+      return `${a} ${b}`;
+    }, ''));
 };
 
 /* hash code for background and font */
@@ -33,7 +33,7 @@ var styleSelector = {
 /* cache the custom style */
 var _style = '';
 
-/* 
+/*
 *  colorSelector['red']('b') // background color red
 *  colorSelector['red']('f') // font color red
 */
@@ -84,11 +84,16 @@ var colorlogger = {
   lastLog: '',
   log: function () {
     var copy = arguments;
-    Array.prototype.unshift.call(copy, _style);
-    Array.prototype.push.call(copy, styleSelector.close, '\r\n');
-    log.apply(null, copy);
-    this.lastLog = Array.prototype.join.call(copy, '');
-    this.logCache += this.lastLog;
+    var length = Object.keys(copy).length;
+    if (length) {
+      copy[0] = `${_style}${copy[0]}`;
+      copy[length - 1] += `${styleSelector.close}\r\n`;
+      log.apply(null, copy);
+      this.lastLog = Array.prototype.join.call(copy, ' ');
+      this.logCache += this.lastLog;
+    } else {
+      log(`${_style}${styleSelector.close}\r\n`);
+    }
     return this;
   },
   colored: function (color, mod, override) {
@@ -123,38 +128,34 @@ var colorlogger = {
     console.log(styleSelector.close);
     return this;
   },
-  save: function (dir, options, cb) {
-    if (!dir || typeof dir == 'function') {
-      cb = dir;
-      dir = path.join(__dirname, 'color.log');
-      options = {
-        record: 'l',
-        append: false
-      };
-    } else if (dir.record || typeof dir.append == 'boolean') {
-      options = dir;
-      options.record = options.record || 'l';
-      dir = path.join(__dirname, 'color.log');
-    } else if (!options || typeof options == 'function') {
-      cb = options;
-      options = {
-        record: 'l',
-        append: false
-      };
-    }
+  save: function (dir, options) {
+    options = options || {
+      record: 'l',
+      append: false
+    };
     options.record = (options.record == 'l') ? this.lastLog : this.logCache;
-    fs.writeFile(dir, options.record, {
-      flag: options.append ? 'a' : 'w'
-    }, function (err) {
-      return (typeof cb == 'function' && cb(err));
+
+    return new Promise(function(resolve, reject) {
+      fs.writeFile(dir, options.record, {
+        flag: options.append ? 'a' : 'w'
+      }, function (err) {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve();
+        }
+      });
     });
   },
-  load: function (dir, cb) {
-    if (!dir || typeof dir != 'string')
-      return util.error(new Error('string path is needed'));
-    fs.readFile(dir, function (err, buf) {
-      console.log(buf && buf.toString());
-      return (typeof cb == 'function' && cb(err));
+  load: function (dir) {
+    return new Promise(function(resolve, reject) {
+      fs.readFile(dir, function (err, buf) {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(buf && buf.toString());
+        }
+      });
     });
   }
 };

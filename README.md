@@ -46,7 +46,7 @@ npm test
 
   colorlogger
             .highlight().underline()
-            .colored('cyan', 'f', true) 
+            .colored('cyan', 'f', true)
             .log('this string is in cyan highlight, underline, and style overrides the former\' setting')
             .default();
 
@@ -58,18 +58,26 @@ npm test
 
 you can also save the colorful log to disk, and load it to terminal in colored next time
 
+in Promise mode:
+
 ```js
 
   colorlogger
-            .highlight(false)
-            .log('disable highlight, you can also save current/all output colored log to disk, and load it with colored');
+  .highlight(false)
+  .log('disable highlight, you can also save current/all output colored log to disk, and load it with colored');
 
-  colorlogger.save(path.join(__dirname, 'color.log'), function (err) {
-    colorlogger.default();
-    console.log('log saved');
-    colorlogger.load(path.join(__dirname, 'color.log'), function (err) {
-      colorlogger.default();
-      console.log('load finished');
-    });
+  colorlogger
+  .save('.log', { append: true, record: 'all' })
+  .then(function () {
+    console.log('all log saved to .log');
+  })
+  .catch(function (err) {
+    console.error(err.message);
+  })
+  .then(function () {
+    return colorlogger.load('.log');
+  })
+  .then(function (log) {
+    console.log(log);
   });
 ```
