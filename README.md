@@ -1,7 +1,11 @@
 colorlogger
 ===
 
+[![npm version](https://badge.fury.io/js/colorlogger.svg)](http://badge.fury.io/js/colorlogger)
+
 colored stdout
+
+![screen](https://raw.githubusercontent.com/abbshr/colorlogger/master/test/screen.png)
 
 ```shell
 
