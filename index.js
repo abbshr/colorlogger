@@ -13,8 +13,8 @@ var log = function () {
   var copy = arguments;
   process.stdout.write(
     Array.prototype.reduce.call(copy, function (a, b, i) {
-      if (!i) return `${b}`
-      return `${a} ${b}`;
+      if (!i) return "" + b;
+      return a + " " + b;
     }, ''));
 };
 
@@ -87,13 +87,13 @@ var colorlogger = {
     var copy = arguments;
     var length = Object.keys(copy).length;
     if (length) {
-      copy[0] = `${_style}${copy[0]}`;
-      copy[length - 1] += `${styleSelector.close}\r\n`;
+      copy[0] = _style + copy[0];
+      copy[length - 1] += styleSelector.close + "\r\n";
       log.apply(null, copy);
       this.lastLog = Array.prototype.join.call(copy, ' ');
       this.logCache += this.lastLog;
     } else {
-      log(`${_style}${styleSelector.close}\r\n`);
+      log(_style+styleSelector.close+"\r\n");
     }
     return this;
   },
