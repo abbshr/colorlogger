@@ -28,3 +28,18 @@ this is your system's default settings[0m
 u can also write like console.log:[0m
 [1m[32mcolorlogger.log("first", "second", "third", ...)[0m
 [32mdisable highlight, you can also save current/all output colored log to disk, and load it with colored[0m
+[30m[47mthis is black string with white bgcolor[0m
+[31mthis is red string[0m
+[32mthis is green string[0m
+[33mthis is yellow string[0m
+[34mthis is blue string[0m
+[35mthis is pink string[0m
+[36mthis is cyan string[0m
+[37mthis is white string[0m
+[37m[31m[47mthis is red string with white background[0m
+this is your system's default settings[0m
+[32mu can also invoke with method chain[0m
+[1m[36mthis string is in cyan highlight, underline, and style overrides the former' setting[0m
+u can also write like console.log:[0m
+[1m[32mcolorlogger.log("first", "second", "third", ...)[0m
+[32mdisable highlight, you can also save current/all output colored log to disk, and load it with colored[0m

@@ -1,6 +1,8 @@
 
 var path = require('path');
-var colorlogger = require('../index.js');
+var Color = require('../index.js');
+
+colorlogger = new Color();
 
 colorlogger.colored('black', true).colored('white', 'b').log('this is black string with white bgcolor');
 colorlogger.colored('red', true).log('this is red string');

@@ -80,9 +80,12 @@ var styleCtrl = function (styleName, on) {
   return this;
 };
 
-var colorlogger = {
-  logCache: '',
-  lastLog: '',
+function Color() {
+  this.logCache = '';
+  this.lastLog = '';
+}
+
+Color.prototype = {
   log: function () {
     var copy = arguments;
     var length = Object.keys(copy).length;
@@ -158,10 +161,15 @@ var colorlogger = {
         }
       });
     });
+  },
+  highlight: function (on) {
+    styleCtrl('highlight', on);
+    return this;
+  },
+  underline: function (on) {
+    styleCtrl('underline', on);
+    return this;
   }
 };
 
-colorlogger.highlight = styleCtrl.bind(colorlogger, 'highlight');
-colorlogger.underline = styleCtrl.bind(colorlogger, 'underline');
-
-module.exports = colorlogger;
+module.exports = Color;
