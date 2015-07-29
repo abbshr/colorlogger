@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node test/test.js"
   },
+  "dependencies": {
+    "bluebird": "*"
+  },
   "keywords": [
     "color",
     "terminal",

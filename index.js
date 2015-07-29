@@ -6,6 +6,7 @@
 
 var fs   = require('fs');
 var util = require('util');
+var Promise = Promise || require('bluebird');
 
 // custom logger
 var log = function () {
